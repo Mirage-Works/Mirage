@@ -50,4 +50,8 @@ contract Supplychain {
         return allShipments;
     }
 
+    function payment(address _recipient, uint256 _amount) public {
+        payable(_recipient).transfer(_amount);
+    }
+
 }

@@ -5,6 +5,7 @@ import { CustomButton } from './';
 import { logo, menu, search, user } from '../assets';
 import { navlinks } from '../constants';
 import "./index.css"
+import { ConnectWallet } from '@thirdweb-dev/react';
 
 //isActive: a string that keeps track of the currently active navigation link.
 //toggleDrawer: a boolean value that toggles the visibility of the navigation menu on small screens.
@@ -36,7 +37,7 @@ const Navbar = () => {
 
 
 
-      <div className="sm:flex hidden flex-row justify-end gap-4">
+      {/* <div className="sm:flex hidden flex-row justify-end gap-4">
         <CustomButton
           btnType="button"
           title={address ? 'Create Shipment' : 'Connect'}
@@ -52,7 +53,11 @@ const Navbar = () => {
             <img src={user} alt="user" className="w-[100%] h-[100%] object-contain" />
           </div>
         </Link>
-      </div>
+      </div> */}
+
+      <ConnectWallet
+        accentColor='#420468'
+      />
 
       {/* Small screen navigation */}
       <div className="sm:hidden flex justify-between items-center relative">

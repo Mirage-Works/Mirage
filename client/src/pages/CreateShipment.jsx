@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { ethers } from 'ethers';
 import { useStorageUpload } from '@thirdweb-dev/react'
 import { useStateContext } from '../context';
 import { warning } from '../assets';
@@ -14,6 +13,7 @@ const CreateShipment = () => {
   const { mutateAsync: upload } = useStorageUpload();
   const [uploadUrl, setUploadUrl] = useState("");
   const [uploadUrlConf, setUploadUrlConf] = useState("");
+
   const uploadToIpfs = async() => {
     const result = await upload({
       data: [file],
@@ -24,6 +24,7 @@ const CreateShipment = () => {
     });
     console.log("Upload Url:",result)
     setUploadUrl(result);
+    
   };
 
   const uploadToIpfsConf = async() => {
@@ -36,6 +37,7 @@ const CreateShipment = () => {
     });
     console.log("Upload Url:",secret)
     setUploadUrlConf(secret);
+    
   };
 
 
@@ -158,21 +160,21 @@ const CreateShipment = () => {
           <div className='text-white'>
             {/* Ipfs uploaded link */}
             
-              <FormField 
+              {/* <FormField 
                 labelName="IPFS Url: "
                 placeholder="Copy and paste the link given below"
                 inputType="text"
                 value={form.commonDocuments}
                 handleChange={(e) => handleFormFieldChange('commonDocuments', e)}
-              />
+              /> */}
               {uploadUrl}
-              <a 
-              href={uploadUrl}
-              >
-                <div className='sm:w-1/5 w-[100px] px-4 py-2 bg-[#1dc071] font-epilogue text-white font-semibold text-[18px] rounded-[17px] justify-center items-center text-center mt-[10px] hover:bg-[#0e2238]'>
+              {form.commonDocuments = uploadUrl.toString()}
+                <div 
+                  className='sm:w-1/5 w-[100px] px-4 py-2 bg-[#1dc071] font-epilogue text-white font-semibold text-[18px] rounded-[17px] justify-center items-center text-center mt-[10px] hover:bg-[#0e2238]'
+                  onClick={() => window.open(uploadUrl, '_blank')}
+                >
                   Link
                 </div>
-              </a>
           </div>
   
           <label for="formFileMultiple" class="form-label text-white">Confidential Document(s) *</label>
@@ -190,21 +192,21 @@ const CreateShipment = () => {
           handleClick={uploadToIpfsConf}
           />
           <div className='text-white'>
-            <FormField 
+            {/* <FormField 
               labelName="IPFS Url: "
               placeholder="Copy and paste the link given below"
               inputType="text"
               value={form.confidentialDocuments}
               handleChange={(e) => handleFormFieldChange('confidentialDocuments', e)}
-            />
+            /> */}
             {uploadUrlConf}
-            <a 
-            href={uploadUrl}
-            >
-              <div className='sm:w-1/5 w-[100px] px-4 py-2 bg-[#1dc071] font-epilogue text-white font-semibold text-[18px] rounded-[17px] justify-center items-center text-center mt-[10px] hover:bg-[#0e2238]'>
+            {form.confidentialDocuments = uploadUrlConf.toString()}
+              <div 
+                className='sm:w-1/5 w-[100px] px-4 py-2 bg-[#1dc071] font-epilogue text-white font-semibold text-[18px] rounded-[17px] justify-center items-center text-center mt-[10px] hover:bg-[#0e2238]'
+                onClick={() => window.open(uploadUrlConf, '_blank')}
+              >
                 Link
               </div>
-            </a>
           </div>
   
 

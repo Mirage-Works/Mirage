@@ -7,7 +7,7 @@ import { EditionMetadataWithOwnerOutputSchema } from '@thirdweb-dev/sdk';
 const StateContext = createContext();
 
 export const StateContextProvider = ({ children }) => {
-  const { contract } = useContract('0xeBadcaADA53BCf83Bb3A7490EfA5b4FBCC4aF712');
+  const { contract } = useContract('0x6AdC15cE6a326FA7aFAde4791EcbeEA4cC2b2C66');
   const { mutateAsync: createShipment } = useContractWrite(contract, 'createShipment');
 
   const address = useAddress();
@@ -61,6 +61,11 @@ export const StateContextProvider = ({ children }) => {
 
     return filteredShipments;
   }
+  
+  const payment = async (recipient, amount) =>{
+    const data = await contract.call('payment', recipient, amount);
+    return data;
+  }
 
   return (
     <StateContext.Provider
@@ -71,6 +76,7 @@ export const StateContextProvider = ({ children }) => {
         createShipment: publishShipment,
         getShipments,
         getUserShipments,
+        payment,
       }}
     >
       {children}

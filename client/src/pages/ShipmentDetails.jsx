@@ -7,13 +7,21 @@ import { user } from '../assets';
 
 const ShipmentDetails = () => {
   const { state } = useLocation();
-  const { contract, address } = useStateContext();
+  const { contract, address, payment } = useStateContext();
+  const [ isLoading, setIsLoading ] = useState(false);
+  const [ amount, setAmount ] = useState('');
 
+  const handlePayment = async () => {
+    setIsLoading(true);
+    await payment(state.sender, amount);
+    console.log(amount, 'This is amount');
+    setIsLoading(false);
+  }
 
   return (
-    <div className='bg-[#420468] rounded-[20px]'>
+    <div className='bg-[] rounded-[20px]'>
       
-      {/* {isLoading && <Loader />} */}
+      {isLoading && <Loader />}
       <div className="w-full flex md:flex-row flex-col mt-10 gap-[30px]">
         <div className="flex-1 flex-col">
           
@@ -126,7 +134,7 @@ const ShipmentDetails = () => {
           </div>
             {address === state.sender || address === state.receiver &&
                 <div>
-                <h4 className="font-epilogue font-semibold text-[16px] text-black">Confidential Documents</h4>
+                <h4 className="font-epilogue font-semibold text-[16px] text-white">Confidential Documents</h4>
                 <a href={state.confidentialDocuments}>
                   <div className="mt-[15px] flex flex-col gap-4 text-[#3285d2] hover:text-[#024787]">
                     {state.confidentialDocuments}
@@ -136,6 +144,39 @@ const ShipmentDetails = () => {
             }
           
         </div>
+
+        { address === state.receiver
+          &&
+
+            <div className='flex-1'>
+            <h4 className='font-epilogue font-semibold text-white text-[18px] uppercase'>
+              Payment
+            </h4>
+
+            <div className='mt-[20px] flex flex-col p-4 bg-[#420468] rounded-[10px]'>
+              <p className='font-epilogue font-medium text-[20px] leading-[30px] text-center text-[#79797e]'>
+                  Fund the Shipment
+              </p>
+              <div className='mt-[30px]'>
+                  <input
+                    type="number"
+                    placeholder='FTM 0.1'
+                    step='0.01'
+                    className='w-full py-[10px] sm:px-[20px] px-[15px] outline-none border-[1px] border-[#79797e] bg-transparent font-epilogue text-white text-[18px] leading-[30px] placeholder:text-[#79797e] rounded-[10px]' 
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
+                  {console.log(amount,"Amount")}
+                  <CustomButton
+                    btntype='button'
+                    title='Pay'
+                    styles="w-full bg-[#6942eb] mt-[30px]"
+                    handleClick={handlePayment}
+                  />
+              </div>
+            </div>
+          </div>
+        }
 
       </div>
     </div>
