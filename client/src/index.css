@@ -7,7 +7,7 @@
 .linear-gradient {
   background: linear-gradient(
     179.14deg,
-    rgba(32, 18, 63, 0) -7.14%,
+    #20123f00 -7.14%,
     #000000 87.01%
   );
 }
@@ -15,4 +15,50 @@
 input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   filter: invert(0.8);
+}
+
+.coupon-applied {
+  background: #420468;
+  border-radius: 10px;
+  color: white;
+  width: 500px;
+  display: inline-block;
+  font-size: 15px;
+}
+.lucky-coupon {
+  border-radius: 10px;
+  background-color: #6942eb;
+  color: white;
+  width: 500px;
+  display: inline-block;
+  font-size: 15px;
+}
+
+.lucky-coupon-code {
+  padding: 15px;
+  display: inline-block;
+  float: left;
+  font-weight: bold;
+}
+
+.copy-code {
+  padding: 8px 20px;
+  margin-top: 7px;
+  background-color: #420468;
+  display: inline-block;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.coupon-copied {
+  padding: 8px 10px;
+  margin-top: 7px;
+  background-color: #6942eb;
+  border-radius: 10px;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }

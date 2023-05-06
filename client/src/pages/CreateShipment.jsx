@@ -160,13 +160,6 @@ const CreateShipment = () => {
           <div className='text-white'>
             {/* Ipfs uploaded link */}
             
-              {/* <FormField 
-                labelName="IPFS Url: "
-                placeholder="Copy and paste the link given below"
-                inputType="text"
-                value={form.commonDocuments}
-                handleChange={(e) => handleFormFieldChange('commonDocuments', e)}
-              /> */}
               {uploadUrl}
               {form.commonDocuments = uploadUrl.toString()}
                 <div 
@@ -192,13 +185,7 @@ const CreateShipment = () => {
           handleClick={uploadToIpfsConf}
           />
           <div className='text-white'>
-            {/* <FormField 
-              labelName="IPFS Url: "
-              placeholder="Copy and paste the link given below"
-              inputType="text"
-              value={form.confidentialDocuments}
-              handleChange={(e) => handleFormFieldChange('confidentialDocuments', e)}
-            /> */}
+            
             {uploadUrlConf}
             {form.confidentialDocuments = uploadUrlConf.toString()}
               <div 
@@ -222,11 +209,6 @@ const CreateShipment = () => {
           <img src={warning} alt="warning" className="w-[40px] h-[40px] object-contain"/>
           <h4 className="font-epilogue font-bold text-[20px] text-[#ffffff] ml-[20px]">Check entered details are correct or not. Once Submitted, it cannot be modified!</h4>
         </div>
-
-
-          
-          
-
           <div className="flex justify-center items-center mt-[40px]">
             <CustomButton 
               btnType="submit"

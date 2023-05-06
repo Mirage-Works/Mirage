@@ -11,13 +11,14 @@
   "dependencies": {
     "@icongo/ti": "^1.1.2",
     "@thirdweb-dev/react": "^3",
-    "react-awesome-button": "^6.5.1",
     "@thirdweb-dev/sdk": "^3",
-    "react-icons": "^4.4.0",
     "ethers": "^5.7.2",
     "mdb-react-ui-kit": "^5.1.0",
     "react": "^18.2.0",
+    "react-awesome-button": "^6.5.1",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.8.0",
     "react-router-dom": "^6.4.4",
     "stepper": "^0.0.4"
   },

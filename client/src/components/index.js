@@ -7,3 +7,4 @@ export { default as DisplayShipments } from './DisplayShipments';
 export { default as FundCard } from './FundCard';
 export { default as Loader } from './Loader';
 export { default as Stepper } from './Stepper';
+export { default as CountBox } from './CountBox';
