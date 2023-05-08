@@ -4,7 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Stepper from "../components/Stepper";
 import { useStateContext } from '../context';
 import { CustomButton, Loader, CountBox } from '../components';
-import { user } from '../assets';
+import thumbs1 from '../assets/thumbs1.png';
+import thumbs2 from '../assets/thumbs2.png';
+import thumbs3 from '../assets/thumbs3.png';
 
 function Step({ number, text, isVerified }) {
   const stepClass = `w-[60px] h-[60px] text-center p-4 rounded-full border-2 ${
@@ -173,8 +175,8 @@ const ShipmentDetails = () => {
             <h4 className="font-epilogue font-semibold text-[18px] text-white ">User Details</h4>
 
             <div className="mt-[20px] flex flex-row items-center flex-wrap gap-[14px]">
-              <div className="w-[52px] h-[52px] flex items-center justify-center rounded-full bg-[#2c2f32] cursor-pointer">
-                <img src={user} alt="user" className="w-[100%] h-[100%] object-contain"/>
+              <div className="w-[52px] h-[52px] flex items-center justify-center mb-6 cursor-pointer">
+                <img src={thumbs1} alt="user" className="w-[100%] h-[100%] object-contain rounded-2xl"/>
               </div>
               <div>
               <div className={senderCopied ? 'coupon-applied' : 'lucky-coupon'} >
@@ -193,8 +195,8 @@ const ShipmentDetails = () => {
             </div>
 
             <div className="mt-[20px] flex flex-row items-center flex-wrap gap-[14px]">
-              <div className="w-[52px] h-[52px] flex items-center justify-center rounded-full bg-[#2c2f32] cursor-pointer">
-                <img src={user} alt="user" className="w-[100%] h-[100%] object-contain"/>
+              <div className="w-[52px] h-[52px] flex items-center justify-center  mb-6 cursor-pointer">
+                <img src={thumbs2} alt="user" className="w-[100%] h-[100%] object-contain rounded-2xl"/>
               </div>
               <div>
                   <div className={logCopied ? 'coupon-applied' : 'lucky-coupon'} >
@@ -214,8 +216,8 @@ const ShipmentDetails = () => {
             </div>
 
             <div className="mt-[20px] flex flex-row items-center flex-wrap gap-[14px]">
-              <div className="w-[52px] h-[52px] flex items-center justify-center rounded-full bg-[#2c2f32] cursor-pointer">
-                <img src={user} alt="user" className="w-[100%] h-[100%] object-contain"/>
+              <div className="w-[52px] h-[52px] flex items-center justify-center mb-6">
+                <img src={thumbs3} alt="user" className="w-[100%] h-[100%] object-contain rounded-2xl"/>
               </div>
               <div>
               <div className={receiverCopied ? 'coupon-applied' : 'lucky-coupon'} >
@@ -276,7 +278,23 @@ const ShipmentDetails = () => {
                 Document
               </div>
           </div>
-            {address === state.sender || address === state.receiver &&
+            { address === state.sender &&
+              <div>
+                <h4 className="font-epilogue font-semibold text-[16px] text-white">Confidential Document</h4>
+                {/* <a href={state.confidentialDocuments}>
+                  <div className="mt-[15px] flex flex-col gap-4 text-[#3285d2] hover:text-[#024787]">
+                    {state.confidentialDocuments}
+                  </div>    
+                </a> */}
+                <div 
+                  className='sm:w-1/5 w-[100px] px-4 py-2 bg-[#6942eb] font-epilogue text-white font-semibold text-[18px] rounded-[17px] justify-center items-center text-center mt-[10px] hover:bg-[#0e2238]'
+                  onClick={() => window.open(state.confidentialDocuments, '_blank')}
+                >
+                  Document
+                </div>
+              </div>
+            }
+            { address === state.receiver &&
               <div>
                 <h4 className="font-epilogue font-semibold text-[16px] text-white">Confidential Document</h4>
                 {/* <a href={state.confidentialDocuments}>
@@ -315,14 +333,14 @@ const ShipmentDetails = () => {
                   <p className='font-epilogue font-medium text-[18px] leading-[30px] text-center text-[#808191]'>
                     You can transfer funds using Metamask<br/>
                     Copy the respective address and send <br/>
-                    transaction to the respective address.
+                    transaction through "Send" option from Metamask.
                   </p>
-                  <CustomButton
+                  {/* <CustomButton
                     btntype='button'
                     title='Pay'
                     styles="w-full bg-[#6942eb] mt-[30px]"
                     // handleClick={handlePayment}
-                  />
+                  /> */}
               </div>
             </div>
           </div>

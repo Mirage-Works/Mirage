@@ -67,7 +67,6 @@ const CreateShipment = () => {
     checkIfImage(form.image, async (exists) => {
       if(exists) {
         setIsLoading(true) 
-        // calling createShipment error.... target was deleted, check alternative.
         await createShipment({ ...form})
 
         setIsLoading(false);

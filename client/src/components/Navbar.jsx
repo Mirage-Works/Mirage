@@ -19,7 +19,7 @@ const Navbar = () => {
 
   return (
     <div className="flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6">
-      <div className="lg:flex-1 flex flex-row max-w-[458px] py-2 pl-4 pr-2 h-[52px] bg-[#420468] rounded-[100px]">
+      <div className="lg:flex-1 flex flex-row max-w-[358px] py-2 pl-4 pr-2 h-[52px] bg-[#420468] rounded-[100px]">
         <input type="text" placeholder="Search for shipments" className="flex w-full font-epilogue font-normal text-[14px] placeholder:text-[#989ea6] text-white bg-transparent outline-none" />
 
         <div className="w-[72px] h-full rounded-[20px] bg-[#1dc071] flex justify-center items-center cursor-pointer">
