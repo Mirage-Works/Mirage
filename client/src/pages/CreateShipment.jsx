@@ -40,7 +40,6 @@ const CreateShipment = () => {
     
   };
 
-
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { createShipment } = useStateContext();
@@ -104,8 +103,6 @@ const CreateShipment = () => {
           />
         </div>
 
-
-
         <div className="flex flex-wrap gap-[40px]">
           <FormField 
             labelName="Logistic Address *"
@@ -138,9 +135,6 @@ const CreateShipment = () => {
             value={form.description}
             handleChange={(e) => handleFormFieldChange('description', e)}
           />
-
-
-
 
           <label for="formFileMultiple" class="form-label text-white">Common Document(s) *</label>
           <input class="form-control text-white" type="file" id="formFileMultiple" multiple 

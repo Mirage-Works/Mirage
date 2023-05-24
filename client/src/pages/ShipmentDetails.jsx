@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { useLocation, useNavigate } from 'react-router-dom';
-import Stepper from "../components/Stepper";
+import { useLocation } from 'react-router-dom';
 import { useStateContext } from '../context';
-import { CustomButton, Loader, CountBox } from '../components';
+import { Loader, CountBox } from '../components';
 import thumbs1 from '../assets/thumbs1.png';
 import thumbs2 from '../assets/thumbs2.png';
 import thumbs3 from '../assets/thumbs3.png';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/database';
+
 
 function Step({ number, text, isVerified }) {
   const stepClass = `w-[60px] h-[60px] text-center p-4 rounded-full border-2 ${
@@ -38,16 +40,35 @@ function VerifyButton({ label, isDisabled, onVerify }) {
   );
 }
 
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyD_4U-50K4dgdQdfIEHGKwI-TzbUu_Enjg",
+
+  authDomain: "mirage-950ba.firebaseapp.com",
+
+  projectId: "mirage-950ba",
+
+  storageBucket: "mirage-950ba.appspot.com",
+
+  messagingSenderId: "679707521588",
+
+  appId: "1:679707521588:web:59f8f8168a95cdcaa91061"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+export const dataref = firebase.database();
+
 const ShipmentDetails = () => {
+
   const { state } = useLocation();
-  const { contract, address, payment } = useStateContext();
-  const [ isLoading, setIsLoading ] = useState(false);
+  const { address } = useStateContext();
   const [senderCopied, setSenderCopied] = useState(false);
   const [receiverCopied, setReceiverCopied] = useState(false);
   const [logCopied, setLogCopied] = useState(false);
-  const [ amount, setAmount ] = useState('');
 
-  const [currentStep, setCurrentStep] = useState(1);
   const [isStep1Verified, setIsStep1Verified] = useState(false);
   const [isStep2Verified, setIsStep2Verified] = useState(false);
   const [isStep3Verified, setIsStep3Verified] = useState(false);
@@ -55,51 +76,101 @@ const ShipmentDetails = () => {
   const [user2VerificationTime, setUser2VerificationTime] = useState(null);
   const [user3VerificationTime, setUser3VerificationTime] = useState(null);
 
+  const [verificationData, setVerificationData] = useState(null);
+
+  // Handle functions for each user
   const handleVerifyStep1 = () => {
       setIsStep1Verified(true);
       setUser1VerificationTime(new Date().toGMTString());
-      setCurrentStep(2);
+      
   };
 
   const handleVerifyStep2 = () => {
       setIsStep2Verified(true);
       setUser2VerificationTime(new Date().toGMTString());
-      setCurrentStep(3);
+      
+      
   };
 
   const handleVerifyStep3 = () => {
       setIsStep3Verified(true);
       setUser3VerificationTime(new Date().toGMTString());
+      
   };
+
+  // Function which stores the verification time 
+  // to each user to Firebase as a collection based 
+  // on the Title of the shipment.
+  const usersVerifyUpload = () => {
+     if (user1VerificationTime){
+      dataref.ref(state.title).set({
+        sender_verification_time: `${user1VerificationTime}`
+      }).catch((error) => {
+        console.error("Error occured while uploading: ", error);
+      });
+      
+    }
+    if (user1VerificationTime && user2VerificationTime){
+      dataref.ref(state.title).set({
+        sender_verification_time: `${user1VerificationTime}`,
+        logistics_verification_time: `${user2VerificationTime}`
+      }).catch((error) => {
+        console.error("Error occured while uploading: ", error);
+      });
+    }
+    if (user1VerificationTime && user2VerificationTime && user3VerificationTime){
+      dataref.ref(state.title).set({
+        sender_verification_time: `${user1VerificationTime}`,
+        logistics_verification_time: `${user2VerificationTime}`,
+        receiver_verification_time: `${user3VerificationTime}`
+      }).catch((error) => {
+        console.error("Error occured while uploading: ", error);
+      });
+    }
+  }
+
+  // Function which calls the data 
+  // values stored in Firebase according 
+  // to the Title of the current shipment.
+  const getVerificationTimes = async () => {
+    const ref = dataref.ref(state.title);
+    try {
+      const snapshot = await ref.once('value');
+      setVerificationData(snapshot.val());
+      console.log('Importing values from firebase completed! Exiting ...');
+    } catch (error) {
+      console.log('Data values calling error from firebase:', error);
+    }
+  }
+  useEffect(() => {
+    getVerificationTimes();
+  }, [])
 
   const isUser1Turn = !isStep1Verified && !isStep2Verified && !isStep3Verified;
   const isUser2Turn = isStep1Verified && !isStep2Verified && !isStep3Verified;
   const isUser3Turn = isStep1Verified && isStep2Verified && !isStep3Verified;
 
-
-  const handlePayment = async () => {
-    setIsLoading(true);
-    await payment(state.sender, amount);
-    console.log(amount, 'This is amount');
-    setIsLoading(false);
-  }
-  
-
   return (
-    <div className='bg-[] rounded-[20px]'>
+    <div className='rounded-[20px]'>
       
-      {isLoading && <Loader />}
       <div className="w-full flex md:flex-row flex-col mt-10 gap-[30px]">
         <div className="flex-1 flex-col">
           
           <div className='gap-[30px] flex'>
             <img src={state.image} alt="shipment" className="w-full h-[410px] object-cover rounded-xl"/>
-            
-            <div className='flex w-[200px] flex-wrap justify-between gap-[30px]'>
-              <CountBox title="Sender verified at" value={user1VerificationTime ? `${user1VerificationTime}` : "-" }/>
-              <CountBox title="Logistics verified at" value={user2VerificationTime ? `${user2VerificationTime}` : "-" }/>
-              <CountBox title="Receiver verified at" value={user3VerificationTime ? `${user3VerificationTime}` : "-" }/>
-            </div>
+            { 
+              usersVerifyUpload()
+            }
+
+                <div className='flex w-[200px] flex-wrap justify-between gap-[30px]'>
+                <CountBox title="Sender verified at" value={verificationData ? `${verificationData.sender_verification_time}` : '-'}/>
+ 
+                <CountBox title="Logistics verified at" value={verificationData ? `${verificationData.logistics_verification_time}` : '-'}/>
+
+                <CountBox title="Receiver verified at" value={verificationData ? `${verificationData.receiver_verification_time}` : '-'}/>
+                
+              </div>
+              
           </div>
           
           {/* Progress Tracking */}
@@ -123,6 +194,7 @@ const ShipmentDetails = () => {
                 Receiver's View
               </h4>
             }
+            
 
             <div className="flex flex-col gap-[40px] pt-11 items-center justify-center">
               {/* <Stepper /> */}
@@ -141,6 +213,7 @@ const ShipmentDetails = () => {
                         isDisabled={!isUser1Turn}
                         onVerify={handleVerifyStep1}
                       />
+                      
                   }
                   
                   {address === state.logistics &&
@@ -254,8 +327,6 @@ const ShipmentDetails = () => {
               </div>
           </div>
 
-
-
           <div>
             <p className="font-epilogue font-semibold text-[16px] text-white">Description</p>
               <div className="mt-[20px]">
@@ -266,11 +337,6 @@ const ShipmentDetails = () => {
           <div>
             <h4 className="font-epilogue font-semibold text-[16px] text-white">Common Document</h4>
 
-              {/* <a href={state.commonDocuments}>
-                <div className="mt-[15px] flex flex-col gap-4 text-[#3285d2] hover:text-[#024787]">
-                  {state.commonDocuments}
-                </div>
-              </a> */}
               <div 
                 className='sm:w-1/5 w-[100px] px-4 py-2 bg-[#6942eb] font-epilogue text-white font-semibold text-[18px] rounded-[17px] justify-center items-center text-center mt-[10px] hover:bg-[#0e2238]'
                 onClick={() => window.open(state.commonDocuments, '_blank')}
@@ -281,11 +347,7 @@ const ShipmentDetails = () => {
             { address === state.sender &&
               <div>
                 <h4 className="font-epilogue font-semibold text-[16px] text-white">Confidential Document</h4>
-                {/* <a href={state.confidentialDocuments}>
-                  <div className="mt-[15px] flex flex-col gap-4 text-[#3285d2] hover:text-[#024787]">
-                    {state.confidentialDocuments}
-                  </div>    
-                </a> */}
+
                 <div 
                   className='sm:w-1/5 w-[100px] px-4 py-2 bg-[#6942eb] font-epilogue text-white font-semibold text-[18px] rounded-[17px] justify-center items-center text-center mt-[10px] hover:bg-[#0e2238]'
                   onClick={() => window.open(state.confidentialDocuments, '_blank')}
@@ -297,11 +359,7 @@ const ShipmentDetails = () => {
             { address === state.receiver &&
               <div>
                 <h4 className="font-epilogue font-semibold text-[16px] text-white">Confidential Document</h4>
-                {/* <a href={state.confidentialDocuments}>
-                  <div className="mt-[15px] flex flex-col gap-4 text-[#3285d2] hover:text-[#024787]">
-                    {state.confidentialDocuments}
-                  </div>    
-                </a> */}
+                
                 <div 
                   className='sm:w-1/5 w-[100px] px-4 py-2 bg-[#6942eb] font-epilogue text-white font-semibold text-[18px] rounded-[17px] justify-center items-center text-center mt-[10px] hover:bg-[#0e2238]'
                   onClick={() => window.open(state.confidentialDocuments, '_blank')}
@@ -322,25 +380,12 @@ const ShipmentDetails = () => {
                   Fund the Shipment
               </p>
               <div className='mt-[30px]'>
-                  {/* <input
-                    type="number"
-                    placeholder='FTM 0.1'
-                    step='0.01'
-                    className='w-full py-[10px] sm:px-[20px] px-[15px] outline-none border-[1px] border-[#79797e] bg-transparent font-epilogue text-white text-[18px] leading-[30px] placeholder:text-[#79797e] rounded-[10px]' 
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                  /> */}
+                  
                   <p className='font-epilogue font-medium text-[18px] leading-[30px] text-center text-[#808191]'>
                     You can transfer funds using Metamask<br/>
                     Copy the respective address and send <br/>
                     transaction through "Send" option from Metamask.
                   </p>
-                  {/* <CustomButton
-                    btntype='button'
-                    title='Pay'
-                    styles="w-full bg-[#6942eb] mt-[30px]"
-                    // handleClick={handlePayment}
-                  /> */}
               </div>
             </div>
           </div>
