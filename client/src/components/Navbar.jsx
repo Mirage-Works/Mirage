@@ -36,25 +36,6 @@ const Navbar = () => {
       </div>
 
 
-
-      {/* <div className="sm:flex hidden flex-row justify-end gap-4">
-        <CustomButton
-          btnType="button"
-          title={address ? 'Create Shipment' : 'Connect'}
-          styles={address ? 'bg-[#420468]' : 'bg-[#1dc071]'}
-          handleClick={() => {
-            if (address) navigate('create-shipment')
-            else connect()
-          }}
-        />
-
-        <Link to="/profile">
-          <div className="w-[52px] h-[52px] rounded-full bg-[#e9e9ef] flex justify-center items-center cursor-pointer">
-            <img src={user} alt="user" className="w-[100%] h-[100%] object-contain" />
-          </div>
-        </Link>
-      </div> */}
-
       <ConnectWallet
         accentColor='#420468'
       />

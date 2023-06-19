@@ -101,6 +101,7 @@ const ShipmentDetails = () => {
   // Function which stores the verification time 
   // to each user to Firebase as a collection based 
   // on the Title of the shipment.
+
   const usersVerifyUpload = () => {
      if (user1VerificationTime){
       dataref.ref(state.title).set({
@@ -128,6 +129,7 @@ const ShipmentDetails = () => {
       });
     }
   }
+
 
   // Function which calls the data 
   // values stored in Firebase according 

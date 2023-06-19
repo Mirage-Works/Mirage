@@ -14,6 +14,7 @@ const CreateShipment = () => {
   const [uploadUrl, setUploadUrl] = useState("");
   const [uploadUrlConf, setUploadUrlConf] = useState("");
 
+  // Common file upload to IPFS
   const uploadToIpfs = async() => {
     const result = await upload({
       data: [file],
@@ -27,6 +28,7 @@ const CreateShipment = () => {
     
   };
 
+  // Confidential file upload to IPFS
   const uploadToIpfsConf = async() => {
     const secret = await upload({
       data: [file],
